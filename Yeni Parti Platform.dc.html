@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&subset=latin,latin-ext&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#ffffff;font-family:'Archivo','Noto Sans',system-ui,'Segoe UI',Helvetica,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+*{box-sizing:border-box}
+a{color:#D0212A;text-decoration:none}
+a:hover{color:#a51820}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#D0212A!important}
+input,select{font-family:'Archivo',sans-serif}
+input:not([type=checkbox]):not([type=radio]):not([type=date]),select{-webkit-appearance:none;appearance:none}
+input[type=checkbox]{-webkit-appearance:auto;appearance:auto}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes qrpulse{0%,100%{opacity:1}50%{opacity:.6}}
+</style>
+</helmet>
+<div style="min-height:100vh;width:100%;background:#ffffff;display:flex;flex-direction:column;align-items:center;padding:0 16px 32px">
+<div style="width:100%;max-width:520px;display:flex;flex-direction:column;flex:1">
+
+  <div style="display:flex;justify-content:center;padding:26px 0 2px">
+    <img src="uploads/pasted-1784994405000-0.png" alt="YENİ Parti" style="width:158px;max-width:52%;height:auto;display:block">
+  </div>
+
+  <!-- 1 · GİRİŞ -->
+  <sc-if value="{{ isEntry }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:18px;padding-top:12px;animation:fadeUp .35s ease both">
+      <div style="display:flex;flex-direction:column;gap:11px;text-align:center">
+        <h1 style="font-size:23px;font-weight:900;color:#111111;margin:0;line-height:1.3;text-wrap:balance">Geleceği Birlikte İnşa Etmeye Var Mısın?</h1>
+        <p style="font-size:15.5px;line-height:1.6;color:#3a3a3a;margin:0;text-wrap:pretty">İşçinin alın terinden gencin hayallerine, emeklinin huzurundan çiftçinin bereketine… YENİ Parti; bu ülkenin üreten, emek veren ve yarınlara umutla bakan tüm insanlarının sesidir.</p>
+        <p style="font-size:15.5px;line-height:1.6;color:#3a3a3a;margin:0;text-wrap:pretty">Cumhuriyet değerlerimizden aldığımız güçle, daha adil ve aydınlık bir geleceği birlikte kuruyoruz. Sen yoksan bir eksiğiz!</p>
+        <p style="font-size:16.5px;line-height:1.45;color:#D0212A;font-weight:800;margin:0;text-wrap:balance">Aramıza Katıl, YENİ Bir Başlangıcın Parçası Ol!</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <label for="tcinput" style="font-size:15px;font-weight:700;color:#111111">T.C. Kimlik Numaranız</label>
+        <input id="tcinput" type="text" inputMode="numeric" maxLength="11" placeholder="" value="{{ tc }}" onChange="{{ onTc }}" style="width:100%;padding:15px 16px;font-size:20px;font-weight:600;text-align:center;letter-spacing:5px;border:2px solid #dddddd;border-radius:14px;color:#111111;transition:border-color .15s">
+        <sc-if value="{{ tcError }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:10px;align-items:flex-start;background:#fdecec;border:1px solid #f2b6ba;color:#a51820;padding:14px 16px;border-radius:12px;font-size:14.5px;line-height:1.5;font-weight:600">
+            <span style="flex:none">!</span><span>{{ tcError }}</span>
+          </div>
+        </sc-if>
+        <button onClick="{{ doQuery }}" disabled="{{ querying }}" style="width:100%;padding:17px;background:#D0212A;color:#ffffff;border:none;border-radius:14px;font-family:'Archivo',sans-serif;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(208,33,42,.28);display:flex;align-items:center;justify-content:center;gap:12px" style-hover="background:#b71b23">{{ queryLabel }}</button>
+        
+      </div>
+
+          </div>
+  </sc-if>
+
+  <!-- 2 · ÇOK ADIMLI FORM -->
+  <sc-if value="{{ isForm }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:20px;padding-top:16px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button onClick="{{ back }}" style="background:none;border:none;padding:8px 0;font-family:'Archivo',sans-serif;font-size:17px;font-weight:700;color:#D0212A;cursor:pointer">← Geri</button>
+        <div style="flex:1"></div>
+        <div style="font-size:15px;font-weight:700;color:#888888">ADIM {{ stepNum }} / 5</div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <div style="flex:1;height:6px;border-radius:3px;background:{{ bar1 }};transition:background .3s"></div>
+        <div style="flex:1;height:6px;border-radius:3px;background:{{ bar2 }};transition:background .3s"></div>
+        <div style="flex:1;height:6px;border-radius:3px;background:{{ bar3 }};transition:background .3s"></div>
+        <div style="flex:1;height:6px;border-radius:3px;background:{{ bar4 }};transition:background .3s"></div>
+        <div style="flex:1;height:6px;border-radius:3px;background:{{ bar5 }};transition:background .3s"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <h2 style="font-size:22px;font-weight:900;color:#111111;margin:0;line-height:1.25">{{ stepTitle }}</h2>
+        <div style="font-size:14px;color:#888888;line-height:1.5">{{ stepHint }}</div>
+      </div>
+
+      <!-- Adım 1: kimlik (otomatik dolu) -->
+      <sc-if value="{{ isS1blank }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px;animation:fadeUp .3s ease both">
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Ad <span style="color:#D0212A">*</span></span>
+            <input type="text" value="{{ mName }}" onChange="{{ onMName }}" placeholder="Adınız" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Soyad <span style="color:#D0212A">*</span></span>
+            <input type="text" value="{{ mSurname }}" onChange="{{ onMSurname }}" placeholder="Soyadınız" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333">Cinsiyet
+            <select value="{{ mGender }}" onChange="{{ onMGender }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
+              <option value="">Seçiniz</option>
+              <option value="Kadın">Kadın</option>
+              <option value="Erkek">Erkek</option>
+            </select></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Doğum Yeri <span style="color:#D0212A">*</span></span>
+            <div style="position:relative">
+              <input type="text" autoComplete="off" value="{{ mBirthPlace }}" onChange="{{ onMBirthPlace }}" onFocus="{{ openSug }}" onBlur="{{ closeSug }}" placeholder="Örn. İstanbul" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
+              <sc-if value="{{ showSug }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:20;background:#ffffff;border:2px solid #ececec;border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.12);max-height:220px;overflow-y:auto;display:flex;flex-direction:column">
+                  <sc-for list="{{ sugList }}" as="s" hint-placeholder-count="0">
+                    <button type="button" onPointerDown="{{ s.pick }}" onMouseDown="{{ s.pick }}" style="text-align:left;background:none;border:none;border-bottom:1px solid #f4f4f4;padding:13px 15px;font-family:'Archivo',sans-serif;font-size:16px;color:#111111;cursor:pointer" style-hover="background:#fdf0f1;color:#D0212A">{{ s.name }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div></label>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isS1filled }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:16px;animation:fadeUp .3s ease both">
+          <div style="background:#f6f7f8;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px">
+            <div style="font-size:14px;font-weight:800;color:#D0212A;letter-spacing:1px">NÜFUS KAYITLARINDAN ALINDI</div>
+            <sc-for list="{{ nviRows }}" as="r" hint-placeholder-count="5">
+              <div style="display:flex;justify-content:space-between;gap:16px;font-size:15px;border-bottom:1px solid #e8e8e8;padding-bottom:10px">
+                <span style="color:#7a7a7a;flex:none">{{ r.k }}</span><span style="font-weight:700;color:#111111;text-align:right">{{ r.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size:15px;color:#888888;line-height:1.5">Bu bilgiler değiştirilemez. Hatalı görünüyorsa geri dönüp kimlik numaranızı kontrol edin.</div>
+        </div>
+      </sc-if>
+
+      <!-- Adım 2: iletişim -->
+      <sc-if value="{{ isS2 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:18px;animation:fadeUp .3s ease both">
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Doğum Tarihi <span style="color:#D0212A">*</span></span>
+            <input type="date" value="{{ dob }}" onChange="{{ onDob }}" min="1900-01-01" max="{{ maxDob }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
+            <span style="font-size:12.5px;font-weight:500;color:#9a9a9a">Üyelik için 18 yaşını doldurmuş olmanız gerekir.</span></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Cep Telefonu <span style="color:#D0212A">*</span></span>
+            <input type="tel" inputMode="tel" value="{{ phone }}" onChange="{{ onPhone }}" placeholder="05XX XXX XX XX" inputMode="numeric" maxLength="14" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">İl <span style="color:#D0212A">*</span></span>
+            <div style="position:relative">
+              <input type="text" autoComplete="off" value="{{ city }}" onChange="{{ onCity }}" onFocus="{{ cityFocus }}" onBlur="{{ cityBlur }}" placeholder="Örn. İstanbul" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
+              <sc-if value="{{ cityShow }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:30;background:#ffffff;border:2px solid #ececec;border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.12);max-height:220px;overflow-y:auto;display:flex;flex-direction:column">
+                  <sc-for list="{{ cityItems }}" as="c" hint-placeholder-count="0">
+                    <button type="button" onPointerDown="{{ c.pick }}" onMouseDown="{{ c.pick }}" style="text-align:left;background:none;border:none;border-bottom:1px solid #f4f4f4;padding:13px 15px;font-family:'Archivo',sans-serif;font-size:16px;color:#111111;cursor:pointer" style-hover="background:#fdf0f1;color:#D0212A">{{ c.name }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">İlçe <span style="color:#D0212A">*</span></span>
+            <div style="position:relative">
+              <input type="text" autoComplete="off" value="{{ district }}" onChange="{{ onDistrict }}" onFocus="{{ distFocus }}" onBlur="{{ distBlur }}" placeholder="{{ distPlaceholder }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
+              <sc-if value="{{ distShow }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:29;background:#ffffff;border:2px solid #ececec;border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.12);max-height:220px;overflow-y:auto;display:flex;flex-direction:column">
+                  <sc-for list="{{ distItems }}" as="d" hint-placeholder-count="0">
+                    <button type="button" onPointerDown="{{ d.pick }}" onMouseDown="{{ d.pick }}" style="text-align:left;background:none;border:none;border-bottom:1px solid #f4f4f4;padding:13px 15px;font-family:'Archivo',sans-serif;font-size:16px;color:#111111;cursor:pointer" style-hover="background:#fdf0f1;color:#D0212A">{{ d.name }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Mahalle <span style="color:#D0212A">*</span></span>
+            <div style="position:relative">
+              <input type="text" autoComplete="off" value="{{ hood }}" onChange="{{ onHood }}" onFocus="{{ hoodFocus }}" onBlur="{{ hoodBlur }}" placeholder="{{ hoodPlaceholder }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
+              <sc-if value="{{ hoodShow }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:28;background:#ffffff;border:2px solid #ececec;border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.12);max-height:220px;overflow-y:auto;display:flex;flex-direction:column">
+                  <sc-for list="{{ hoodItems }}" as="m" hint-placeholder-count="0">
+                    <button type="button" onPointerDown="{{ m.pick }}" onMouseDown="{{ m.pick }}" style="text-align:left;background:none;border:none;border-bottom:1px solid #f4f4f4;padding:13px 15px;font-family:'Archivo',sans-serif;font-size:16px;color:#111111;cursor:pointer" style-hover="background:#fdf0f1;color:#D0212A">{{ m.name }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Açık Adres <span style="color:#D0212A">*</span></span>
+            <textarea rows="3" value="{{ address }}" onChange="{{ onAddress }}" placeholder="Sokak, bina ve daire no" style="width:100%;padding:14px;font-size:16.5px;font-family:'Archivo',sans-serif;border:2px solid #dddddd;border-radius:12px;resize:vertical"></textarea></label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">E-posta <span style="font-weight:500;color:#9a9a9a">(zorunlu değil)</span></span>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <input type="text" inputMode="email" autoComplete="off" value="{{ emailUser }}" onChange="{{ onEmailUser }}" placeholder="kullaniciadi" style="flex:1 1 130px;min-width:0;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
+              <span style="font-size:17px;font-weight:700;color:#999999;flex:none">@</span>
+              <select value="{{ emailDomain }}" onChange="{{ onEmailDomain }}" style="flex:1 1 150px;min-width:0;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
+                <sc-for list="{{ mailDomains }}" as="d" hint-placeholder-count="5">
+                  <option value="{{ d }}">{{ d }}</option>
+                </sc-for>
+                <option value="__other">Diğer (elle yaz)</option>
+              </select>
+            </div>
+            <sc-if value="{{ emailOther }}" hint-placeholder-val="{{ false }}">
+              <input type="text" autoComplete="off" value="{{ emailCustom }}" onChange="{{ onEmailCustom }}" placeholder="kurumsalposta.com.tr" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
+            </sc-if>
+            <span style="font-size:12.5px;font-weight:500;color:#9a9a9a">{{ emailPreview }}</span></label>
+        </div>
+      </sc-if>
+
+      <!-- Adım 3: eğitim & meslek (otomatik dolu, düzenlenebilir) -->
+      <sc-if value="{{ isS3 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:18px;animation:fadeUp .3s ease both">
+          <sc-if value="{{ autoFilled }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#f0f8f2;border:1px solid #c4e3cd;color:#1f6b3a;border-radius:12px;padding:14px 16px;font-size:16px;font-weight:600;line-height:1.5">Eğitim ve meslek bilgileriniz kayıtlardan otomatik dolduruldu. Gerekiyorsa güncelleyebilirsiniz.</div>
+          </sc-if>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Öğrenim Durumu <span style="color:#D0212A">*</span></span>
+            <select value="{{ edu }}" onChange="{{ onEdu }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
+              <option value="">Seçiniz…</option>
+              <sc-for list="{{ eduOptions }}" as="o" hint-placeholder-count="4">
+                <option value="{{ o }}">{{ o }}</option>
+              </sc-for>
+            </select></label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333">Bölüm / Program
+              <input type="text" value="{{ program }}" onChange="{{ onProgram }}" placeholder="Bölüm veya program adınız" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Ana Meslek / Uğraş Alanı <span style="color:#D0212A">*</span></span>
+              <input type="text" value="{{ job }}" onChange="{{ onJob }}" placeholder="Ana mesleğiniz" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Çalışma Durumu <span style="color:#D0212A">*</span></span>
+            <select value="{{ workStatus }}" onChange="{{ onWorkStatus }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
+              <option value="">Seçiniz…</option>
+              <sc-for list="{{ workOptions }}" as="o" hint-placeholder-count="4">
+                <option value="{{ o }}">{{ o }}</option>
+              </sc-for>
+            </select></label>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333">Çalıştığı Sektör
+            <select value="{{ sector }}" onChange="{{ onSector }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
+              <option value="">Seçiniz…</option>
+              <sc-for list="{{ sectorOptions }}" as="o" hint-placeholder-count="4">
+                <option value="{{ o }}">{{ o }}</option>
+              </sc-for>
+            </select></label>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Adım 4: siyasi deneyim -->
+      <sc-if value="{{ isS4 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:16px;animation:fadeUp .3s ease both">
+          <div style="background:{{ pmBg }};border:2px solid {{ pmBorder }};border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;transition:background .2s,border-color .2s">
+            <label style="display:flex;align-items:center;gap:14px;font-size:16px;font-weight:600;color:#222222;cursor:pointer">
+              <input type="checkbox" checked="{{ wasMember }}" onChange="{{ onWasMember }}" style="width:24px;height:24px;flex:none;accent-color:#D0212A">
+              <span>Daha önce başka bir siyasi partiye üye miydiniz?</span>
+            </label>
+            <sc-if value="{{ wasMember }}" hint-placeholder-val="{{ false }}">
+              <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333;margin-left:38px"><span style="display:flex;align-items:center;gap:5px">Son üyesi olduğunuz siyasi parti hangisiydi? <span style="color:#D0212A">*</span></span>
+                <select value="{{ prevParty }}" onChange="{{ onPrevParty }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
+                  <option value="">Seçiniz…</option>
+                  <sc-for list="{{ partyOptions }}" as="p" hint-placeholder-count="5">
+                    <option value="{{ p }}">{{ p }}</option>
+                  </sc-for>
+                </select></label>
+            </sc-if>
+          </div>
+          <div style="background:{{ roleBg }};border:2px solid {{ roleBorder }};border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;transition:background .2s,border-color .2s">
+            <label style="display:flex;align-items:center;gap:14px;font-size:16px;font-weight:600;color:#222222;cursor:pointer">
+              <input type="checkbox" checked="{{ wantRole }}" onChange="{{ onWantRole }}" style="width:24px;height:24px;flex:none;accent-color:#D0212A">
+              <span>YENİ Parti’de görev almak ister misiniz?</span>
+            </label>
+            <sc-if value="{{ wantRole }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px;margin-left:12px;padding-left:24px;border-left:3px solid #f2b6ba">
+                <sc-for list="{{ roleItems }}" as="r" hint-placeholder-count="3">
+                  <label style="display:flex;align-items:center;gap:12px;font-size:15.5px;font-weight:500;color:#333333;cursor:pointer">
+                    <input type="checkbox" checked="{{ r.on }}" onChange="{{ r.toggle }}" style="width:22px;height:22px;flex:none;accent-color:#D0212A">
+                    <span>{{ r.label }}</span>
+                  </label>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Adım 5: onay -->
+      <sc-if value="{{ isS5 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:18px;animation:fadeUp .3s ease both">
+          <div style="border:2px solid #f0f0f0;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ summary }}" as="r" hint-placeholder-count="7">
+              <div style="display:flex;justify-content:space-between;gap:16px;font-size:15px">
+                <span style="color:#7a7a7a;flex:none">{{ r.k }}</span><span style="font-weight:700;color:#111111;text-align:right">{{ r.v }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;border-top:1px solid #f0f0f0;padding-top:16px">
+            <label style="display:flex;gap:14px;align-items:flex-start;cursor:pointer">
+              <input type="checkbox" checked="{{ consent }}" onChange="{{ onConsent }}" style="width:24px;height:24px;flex:none;margin-top:2px;accent-color:#D0212A">
+              <span style="display:flex;flex-direction:column;gap:4px">
+                <span style="display:flex;align-items:center;gap:5px;font-size:15.5px;font-weight:700;color:#222222">Üyelik bilgilerimin işlenmesine rıza gösteriyorum <span style="color:#D0212A">*</span></span>
+                <span style="font-size:13.5px;color:#8a8a8a;line-height:1.5">Kişisel verilerinizin 6698 sayılı KVKK kapsamında işlenmesini kabul edersiniz.</span>
+              </span>
+            </label>
+            <label style="display:flex;gap:14px;align-items:flex-start;cursor:pointer">
+              <input type="checkbox" checked="{{ declare }}" onChange="{{ onDeclare }}" style="width:24px;height:24px;flex:none;margin-top:2px;accent-color:#D0212A">
+              <span style="display:flex;flex-direction:column;gap:4px">
+                <span style="display:flex;align-items:center;gap:5px;font-size:15.5px;font-weight:700;color:#222222">Bilgilerin doğruluğunu beyan ediyorum <span style="color:#D0212A">*</span></span>
+                <span style="font-size:13.5px;color:#8a8a8a;line-height:1.5">Formda belirttiğiniz tüm bilgilerin doğru ve eksiksiz olduğunu beyan edersiniz.</span>
+              </span>
+            </label>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ formError }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fdecec;border:1px solid #f2b6ba;color:#a51820;padding:14px 16px;border-radius:12px;font-size:14.5px;line-height:1.5;font-weight:600">{{ formError }}</div>
+      </sc-if>
+
+      <button onClick="{{ next }}" style="width:100%;padding:20px;background:#D0212A;color:#ffffff;border:none;border-radius:14px;font-family:'Archivo',sans-serif;font-size:18px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(208,33,42,.24)" style-hover="background:#b71b23">{{ nextLabel }}</button>
+    </div>
+  </sc-if>
+
+  <!-- 3 · SONUÇ -->
+  <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:20px;padding-top:30px;text-align:center;animation:fadeUp .35s ease both">
+      <div style="width:84px;height:84px;border-radius:50%;background:#D0212A;color:#ffffff;font-size:42px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</div>
+      <h2 style="font-size:23px;font-weight:900;color:#111111;margin:0">Başvurunuz Alındı</h2>
+      <p style="font-size:16px;color:#555555;line-height:1.6;margin:0;text-wrap:pretty">Başvurunuz {{ city }} il başkanlığımıza iletildi. Onaylandığında SMS ile bilgilendirileceksiniz.</p>
+      <button onClick="{{ goCard }}" style="width:100%;padding:19px;background:#111111;color:#ffffff;border:none;border-radius:14px;font-family:'Archivo',sans-serif;font-size:19px;font-weight:700;cursor:pointer">Dijital Üye Kartımı Gör</button>
+      <button onClick="{{ reset }}" style="background:none;border:none;font-family:'Archivo',sans-serif;font-size:17px;font-weight:700;color:#888888;cursor:pointer;padding:6px">Başa dön</button>
+    </div>
+  </sc-if>
+
+  <!-- 4 · ÜYE PANELİ + KART -->
+  <sc-if value="{{ isPanel }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:22px;padding-top:16px;animation:fadeUp .35s ease both">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div style="min-width:0">
+          <div style="font-size:15px;color:#999999">Hoş geldiniz</div>
+          <div style="font-size:20px;font-weight:900;color:#111111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ fullName }}</div>
+        </div>
+        <button onClick="{{ reset }}" style="flex:none;background:none;border:2px solid #e2e2e2;border-radius:10px;padding:11px 16px;font-family:'Archivo',sans-serif;font-size:16px;font-weight:700;color:#666666;cursor:pointer" style-hover="border-color:#D0212A;color:#D0212A">Çıkış</button>
+      </div>
+
+      <div style="background:linear-gradient(135deg,#D0212A 0%,#8f141b 100%);border-radius:20px;padding:24px;color:#ffffff;box-shadow:0 12px 30px rgba(208,33,42,.28);display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div style="line-height:1">
+            <div style="font-size:26px;font-weight:900;letter-spacing:1px">YENİ</div>
+            <div style="width:70px;height:2px;background:#ffffff;margin:6px 0"></div>
+            <div style="font-size:13px;font-weight:700;letter-spacing:6px">PARTİ</div>
+          </div>
+          <div style="font-size:12px;font-weight:800;letter-spacing:1px;background:rgba(255,255,255,.2);padding:7px 12px;border-radius:20px;flex:none">DİJİTAL ÜYE KARTI</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+            <div style="font-size:20px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ fullName }}</div>
+            <div style="font-size:15px;opacity:.92">Üye No: {{ memberNo }}</div>
+            <div style="font-size:15px;opacity:.92">{{ city }} · {{ job }}</div>
+          </div>
+          <div style="background:#ffffff;border-radius:10px;padding:7px;flex:none">
+            <div style="width:80px;height:80px;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(7,1fr);gap:1px;animation:qrpulse 3s ease-in-out infinite">{{ qrCells }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px">
+        <div style="border:2px solid #f0f0f0;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:26px;font-weight:900;color:#D0212A">Güncel</div>
+          <div style="font-size:15px;color:#666666">Aidat durumu</div>
+        </div>
+        <div style="border:2px solid #f0f0f0;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:26px;font-weight:900;color:#111111">3</div>
+          <div style="font-size:15px;color:#666666">Yaklaşan etkinlik</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:17px;font-weight:900;color:#111111">Duyurular</div>
+        <sc-for list="{{ announcements }}" as="a" hint-placeholder-count="3">
+          <div style="border-left:4px solid #D0212A;background:#fafafa;border-radius:0 12px 12px 0;padding:15px 17px;display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:17px;font-weight:800;color:#111111">{{ a.title }}</div>
+            <div style="font-size:16px;color:#666666;line-height:1.5">{{ a.body }}</div>
+            <div style="font-size:14px;color:#b0b0b0">{{ a.date }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="margin-top:auto;padding-top:28px;text-align:center;font-size:12px;color:#c2c2c2;line-height:1.6">YENİ Parti Dijital Üyelik Platformu · Tasarım aşaması</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    screen: 'entry', step: 1, tc: '', tcError: '', querying: false,
+    nvi: null, autoFilled: false, loc: null,
+    mName: '', mSurname: '', mDob: '', mGender: '', mBirthPlace: '', sugOpen: false, sugField: '',
+    phone: '', emailUser: '', emailDomain: 'gmail.com', emailCustom: '', city: '', district: '', hood: '', address: '', dob: '',
+    edu: '', program: '', job: '', workStatus: '', sector: '',
+    wasMember: false, prevParty: '', wantRole: false, roles: [],
+    consent: false, declare: false, formError: ''
+  };
+
+  // Test veritabanı — gerçek bağlantı buraya gelecek (tek fonksiyon: lookupTc)
+  db = {
+    '55555555555': { name: 'Fatih', surname: 'Karaosmanoğlu', dob: '29.04.1981', gender: 'Erkek', birthPlace: 'İstanbul',
+      edu: 'Lisans', program: 'Kamu Yönetimi', job: 'Bilişim', workStatus: 'Ücretli çalışıyor', sector: 'Özel sektör', city: 'İstanbul', district: 'Küçükçekmece', hood: 'Sultan Murat Mah.', address: 'Sultan Murat Mah. örnek adres',
+      phone: '0505 553 04 06', email: 'fatih.karaosmanoglu@gmail.com',
+      wasMember: true, prevParty: 'CHP', wantRole: true, member: false }
+  };
+
+  provinces = ['Adana','Adıyaman','Afyonkarahisar','Ağrı','Aksaray','Amasya','Ankara','Antalya','Ardahan','Artvin','Aydın','Balıkesir','Bartın','Batman','Bayburt','Bilecik','Bingöl','Bitlis','Bolu','Burdur','Bursa','Çanakkale','Çankırı','Çorum','Denizli','Diyarbakır','Düzce','Edirne','Elazığ','Erzincan','Erzurum','Eskişehir','Gaziantep','Giresun','Gümüşhane','Hakkâri','Hatay','Iğdır','Isparta','İstanbul','İzmir','Kahramanmaraş','Karabük','Karaman','Kars','Kastamonu','Kayseri','Kırıkkale','Kırklareli','Kırşehir','Kilis','Kocaeli','Konya','Kütahya','Malatya','Manisa','Mardin','Mersin','Muğla','Muş','Nevşehir','Niğde','Ordu','Osmaniye','Rize','Sakarya','Samsun','Siirt','Sinop','Sivas','Şanlıurfa','Şırnak','Tekirdağ','Tokat','Trabzon','Tunceli','Uşak','Van','Yalova','Yozgat','Zonguldak'];
+
+  provinceList() {
+    const loc = this.state.loc;
+    if (loc) return Object.keys(loc);
+    return this.provinces;
+  }
+
+  componentDidMount() {
+    fetch('tr-locations.json').then(r => r.json()).then(loc => this.setState({ loc: loc })).catch(() => {});
+  }
+
+  mailDomains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'icloud.com', 'yandex.com', 'windowslive.com', 'mynet.com'];
+
+  partyOptions = ['CHP', 'AK Parti', 'HDP/DEM Parti', 'MHP', 'İYİ Parti', 'Saadet Partisi', 'DEVA Partisi', 'GELECEK Partisi', 'TİP', 'DP', 'BBP', 'Yeniden Refah', 'Zafer Partisi', 'Diğer'];
+  roleOptions = ['Seçimlerde görev almak isterim', 'Parti komisyonlarında görev almak isterim', 'Parti saha çalışmalarında görev almak isterim'];
+
+  eduOptions = ['Okuryazar değil', 'İlkokul', 'Ortaokul', 'Lise', 'Ön Lisans', 'Lisans', 'Yüksek Lisans', 'Doktora'];
+  workOptions = ['Ücretli çalışıyor', 'Kendi işinde çalışıyor', 'İş arıyor', 'Emekli', 'Öğrenci', 'Ev işleriyle ilgileniyor', 'Çalışamaz durumda'];
+  sectorOptions = ['Kamu', 'Özel sektör', 'Tarım / Hayvancılık', 'Sanayi / İmalat', 'Ticaret / Perakende', 'Eğitim', 'Sağlık', 'İnşaat', 'Turizm', 'Ulaştırma / Lojistik', 'Finans', 'Bilişim / Teknoloji', 'Medya / Kültür-Sanat', 'Sivil toplum', 'Diğer'];
+
+  validTc(v) {
+    if (!/^[1-9][0-9]{10}$/.test(v)) return false;
+    const d = v.split('').map(Number);
+    const odd = d[0] + d[2] + d[4] + d[6] + d[8];
+    const even = d[1] + d[3] + d[5] + d[7];
+    if ((odd * 7 - even) % 10 !== d[9]) return false;
+    return d.slice(0, 10).reduce((a, b) => a + b, 0) % 10 === d[10];
+  }
+
+  query = () => {
+    const tc = this.state.tc.trim();
+    if (!/^\d{11}$/.test(tc)) return this.setState({ tcError: 'T.C. kimlik numarasını yanlış girdiniz. Lütfen 11 haneli numaranızı giriniz.' });
+    this.setState({ querying: true, tcError: '' });
+    setTimeout(() => {
+      // TASARIM AŞAMASI: 11 haneli her numara geçerli kabul edilir.
+      // Sadece 55555555555 veritabanında kayıtlı gibi davranır (form dolu gelir).
+      const rec = this.db[tc] || { name: '', surname: '', dob: '', gender: '', birthPlace: '',
+        edu: '', program: '', job: '', workStatus: '', sector: '',
+    wasMember: false, prevParty: '', wantRole: false, roles: [], city: '', district: '', member: false, blank: true };
+      if (rec.member) return this.setState({ querying: false, screen: 'panel', nvi: rec, city: rec.city, job: rec.job });
+      this.setState({
+        querying: false, screen: 'form', step: 1, nvi: rec, autoFilled: !rec.blank,
+        edu: rec.edu || '', program: rec.program || '', job: rec.job || '', workStatus: rec.workStatus || '', sector: rec.sector || '',
+        wasMember: !!rec.wasMember, prevParty: rec.prevParty || '', wantRole: !!rec.wantRole,
+        roles: rec.wantRole ? this.roleOptions.slice() : [],
+        city: rec.city || '', district: rec.district || '',
+        phone: rec.phone || '',
+        emailUser: rec.email ? rec.email.split('@')[0] : '',
+        emailDomain: rec.email ? (this.mailDomains.indexOf(rec.email.split('@')[1]) !== -1 ? rec.email.split('@')[1] : '__other') : 'gmail.com',
+        emailCustom: rec.email && this.mailDomains.indexOf(rec.email.split('@')[1]) === -1 ? rec.email.split('@')[1] : '',
+        hood: rec.hood || '', address: rec.address || '',
+        dob: rec.dob ? rec.dob.split('.').reverse().join('-') : ''
+      });
+    }, 700);
+  };
+
+  qr() {
+    const cells = []; let seed = 7;
+    for (let i = 0; i < 49; i++) {
+      seed = (seed * 31 + 17) % 97;
+      const r = Math.floor(i / 7), c = i % 7;
+      const corner = (r < 2 && c < 2) || (r < 2 && c > 4) || (r > 4 && c < 2);
+      cells.push(React.createElement('div', { key: i, style: { background: (corner || seed % 2 === 0) ? '#111' : '#fff' } }));
+    }
+    return cells;
+  }
+
+  renderVals() {
+    const s = this.state, n = s.nvi || {};
+    const set = k => e => this.setState({ [k]: e.target.value, formError: '' });
+    const red = '#D0212A', grey = '#ececec';
+    const blank = !!n.blank;
+    const titles = {
+      1: ['Kimlik Bilgileriniz', blank ? 'Kayıt bulunamadı, lütfen kendiniz doldurun.' : 'Nüfus kayıtlarından otomatik getirildi.'],
+      2: ['İletişim ve Adres', 'Size nasıl ulaşalım?'],
+      3: ['Eğitim ve Mesleki Profil', blank ? 'Eğitim ve mesleki bilgilerinizi paylaşınız.' : 'Kayıtlardan geldi, dilerseniz güncelleyin.'],
+      4: ['Siyasi Deneyim', 'Siyasi deneyimlerinizi paylaşınız.'],
+      5: ['Onay ve Beyanlar', 'Üyelik başvurunuz için aşağıdaki beyanları onaylayınız.']
+    };
+    const dom = s.emailDomain === '__other' ? s.emailCustom.trim() : s.emailDomain;
+    const emailFull = (s.emailUser.trim() && dom) ? s.emailUser.trim() + '@' + dom : '';
+    const t18 = new Date(); t18.setFullYear(t18.getFullYear() - 18);
+    const maxDob = t18.toISOString().slice(0, 10);
+    const provincesFor = this.provinceList();
+    const norm = v => (v || '').toLowerCase()
+      .replace(/i̇/g, 'i').replace(/[iı]/g, 'i').replace(/[şs]/g, 's').replace(/[ğg]/g, 'g')
+      .replace(/[üu]/g, 'u').replace(/[öo]/g, 'o').replace(/[çc]/g, 'c').replace(/â/g, 'a');
+    const match = (list, val) => {
+      const q = norm(val).trim();
+      if (!q) return list.slice(0, 8);
+      return list.filter(x => norm(x).indexOf(q) === 0)
+        .concat(list.filter(x => norm(x).indexOf(q) > 0)).slice(0, 8);
+    };
+    const exact = (list, val) => list.filter(x => norm(x) === norm(val).trim())[0] || null;
+    const q = norm(s.mBirthPlace).trim();
+    const sug = q.length === 0 ? [] :
+      provincesFor.filter(p => norm(p).indexOf(q) === 0).concat(
+        provincesFor.filter(p => norm(p).indexOf(q) > 0)).slice(0, 8);
+    const loc = this.state.loc || {};
+    const provinces = this.provinceList();
+    const cityKey = exact(provinces, s.city);
+    const distList = cityKey ? Object.keys(loc[cityKey] || {}) : [];
+    const distKey = exact(distList, s.district);
+    const hoodList = (cityKey && distKey) ? ((loc[cityKey] || {})[distKey] || []) : [];
+    const ac = (field, list, extra) => {
+      const items = match(list, s[field]);
+      return {
+        value: s[field],
+        onChange: e => this.setState(Object.assign({ [field]: e.target.value, sugField: field, formError: '' }, extra ? extra() : {})),
+        onFocus: () => this.setState({ sugField: field }),
+        onBlur: () => setTimeout(() => this.setState(st => st.sugField === field ? { sugField: '' } : {}), 260),
+        show: s.sugField === field && items.length > 0,
+        items: items.map(name => ({
+          name,
+          pick: () => this.setState(Object.assign({ [field]: name, sugField: '' }, extra ? extra() : {}))
+        }))
+      };
+    };
+    const cityAc = ac('city', provinces, () => ({ district: '', hood: '' }));
+    const distAc = ac('district', distList, () => ({ hood: '' }));
+    const hoodAc = ac('hood', hoodList);
+    const nm = blank ? s.mName : n.name, sn = blank ? s.mSurname : n.surname;
+    const full = (nm ? (nm + ' ' + sn).trim() : 'Üye');
+    return {
+      isEntry: s.screen === 'entry', isForm: s.screen === 'form', isDone: s.screen === 'done', isPanel: s.screen === 'panel',
+      isS1blank: s.step === 1 && blank, isS1filled: s.step === 1 && !blank,
+      mName: s.mName, onMName: set('mName'), mSurname: s.mSurname, onMSurname: set('mSurname'),
+      mDob: s.mDob, onMDob: set('mDob'), mGender: s.mGender, onMGender: set('mGender'),
+      mBirthPlace: s.mBirthPlace,
+      onMBirthPlace: e => this.setState({ mBirthPlace: e.target.value, sugOpen: true, formError: '' }),
+      openSug: () => this.setState({ sugOpen: true }),
+      closeSug: () => setTimeout(() => this.setState({ sugOpen: false }), 260),
+      showSug: s.sugOpen && sug.length > 0,
+      sugList: sug.map(name => ({ name, pick: () => this.setState({ mBirthPlace: name, sugOpen: false }) })),
+      isS2: s.step === 2, isS3: s.step === 3, isS4: s.step === 4, isS5: s.step === 5,
+      stepNum: s.step, stepTitle: titles[s.step][0], stepHint: titles[s.step][1],
+      bar1: s.step >= 1 ? red : grey, bar2: s.step >= 2 ? red : grey, bar3: s.step >= 3 ? red : grey, bar4: s.step >= 4 ? red : grey, bar5: s.step >= 5 ? red : grey,
+      tc: s.tc, tcError: s.tcError, querying: s.querying,
+      queryLabel: s.querying ? 'Bir saniye…' : 'Üye Ol',
+      onTc: e => this.setState({ tc: e.target.value.replace(/\D/g, '').slice(0, 11), tcError: '' }),
+      onTcKey: e => { if (e.key === 'Enter') this.query(); },
+      doQuery: this.query,
+      autoFilled: s.autoFilled,
+      nviRows: [
+        { k: 'Ad', v: n.name || '—' }, { k: 'Soyad', v: n.surname || '—' },
+        { k: 'T.C. Kimlik No', v: s.tc }, { k: 'Doğum Tarihi', v: n.dob || '—' },
+        { k: 'Cinsiyet', v: n.gender || '—' }, { k: 'Doğum Yeri', v: n.birthPlace || '—' }
+      ],
+      phone: s.phone,
+      onPhone: e => {
+        let d = e.target.value.replace(/\D/g, '');
+        if (d.slice(0, 4) === '0090') d = d.slice(4);
+        else if (d.slice(0, 2) === '90' && d.length > 10) d = d.slice(2);
+        else if (d[0] === '0') d = d.slice(1);
+        d = d.slice(0, 10);
+        let out = d.length ? '0' + d : '';
+        if (d.length > 3) out = '0' + d.slice(0, 3) + ' ' + d.slice(3, 6) + (d.length > 6 ? ' ' + d.slice(6, 8) : '') + (d.length > 8 ? ' ' + d.slice(8, 10) : '');
+        this.setState({ phone: out, formError: '' });
+      },
+      emailUser: s.emailUser, onEmailUser: e => this.setState({ emailUser: e.target.value.replace(/[^A-Za-z0-9._%+-]/g, ''), formError: '' }),
+      emailDomain: s.emailDomain, onEmailDomain: set('emailDomain'),
+      emailCustom: s.emailCustom, onEmailCustom: set('emailCustom'),
+      emailOther: s.emailDomain === '__other',
+      mailDomains: this.mailDomains,
+      emailPreview: emailFull ? 'Adresiniz: ' + emailFull : 'Boş bırakabilirsiniz.',
+      city: s.city, onCity: cityAc.onChange, cityFocus: cityAc.onFocus, cityBlur: cityAc.onBlur,
+      cityShow: cityAc.show, cityItems: cityAc.items,
+      district: s.district, onDistrict: distAc.onChange, distFocus: distAc.onFocus, distBlur: distAc.onBlur,
+      distShow: distAc.show, distItems: distAc.items,
+      distPlaceholder: cityKey ? 'İlçe seçiniz' : 'Önce il seçiniz',
+      hood: s.hood, onHood: hoodAc.onChange, hoodFocus: hoodAc.onFocus, hoodBlur: hoodAc.onBlur,
+      hoodShow: hoodAc.show, hoodItems: hoodAc.items,
+      hoodPlaceholder: !this.state.loc ? 'Adres verileri yükleniyor…' : (distKey ? (hoodList.length ? 'Mahalle seçiniz veya yazınız' : 'Mahallenizi yazınız') : 'Önce ilçe seçiniz'),
+      address: s.address, onAddress: set('address'),
+      dob: s.dob, onDob: set('dob'), maxDob: maxDob,
+      edu: s.edu, onEdu: set('edu'), eduOptions: this.eduOptions,
+      program: s.program, onProgram: set('program'),
+      job: s.job, onJob: set('job'),
+      workStatus: s.workStatus, onWorkStatus: set('workStatus'), workOptions: this.workOptions,
+      sector: s.sector, onSector: set('sector'), sectorOptions: this.sectorOptions,
+      wasMember: s.wasMember, onWasMember: e => this.setState({ wasMember: e.target.checked, prevParty: '', formError: '' }),
+      pmBg: s.wasMember ? '#fdf4f4' : '#fafafa', pmBorder: s.wasMember ? '#f2b6ba' : '#f0f0f0',
+      prevParty: s.prevParty, onPrevParty: set('prevParty'), partyOptions: this.partyOptions,
+      wantRole: s.wantRole, onWantRole: e => this.setState({ wantRole: e.target.checked, roles: [], formError: '' }),
+      roleBg: s.wantRole ? '#fdf4f4' : '#fafafa', roleBorder: s.wantRole ? '#f2b6ba' : '#f0f0f0',
+      roleItems: this.roleOptions.map(label => {
+        const on = s.roles.indexOf(label) !== -1;
+        return { label, on, toggle: () => this.setState(st => ({ roles: on ? st.roles.filter(x => x !== label) : st.roles.concat(label) })) };
+      }),
+      consent: s.consent, onConsent: e => this.setState({ consent: e.target.checked, formError: '' }),
+      declare: s.declare, onDeclare: e => this.setState({ declare: e.target.checked, formError: '' }),
+      summary: [
+        { k: 'Ad Soyad', v: nm ? full : '—' }, { k: 'T.C. No', v: s.tc.slice(0, 3) + '******' + s.tc.slice(-2) },
+        { k: 'Doğum Tarihi', v: s.dob ? s.dob.split('-').reverse().join('.') : '—' },
+        { k: 'Telefon', v: s.phone || '—' }, { k: 'E-posta', v: emailFull || '—' },
+        { k: 'İl / İlçe', v: (s.city || '—') + ' / ' + (s.district || '—') },
+        { k: 'Mahalle', v: s.hood || '—' }, { k: 'Adres', v: s.address || '—' },
+        { k: 'Öğrenim', v: s.edu || '—' }, { k: 'Bölüm / Program', v: s.program || '—' },
+        { k: 'Meslek', v: s.job || '—' }, { k: 'Çalışma Durumu', v: s.workStatus || '—' },
+        { k: 'Sektör', v: s.sector || '—' },
+        { k: 'Önceki Parti', v: s.wasMember ? (s.prevParty || '—') : 'Üye olmadı' },
+        { k: 'Görev Talebi', v: s.wantRole ? (s.roles.length ? s.roles.join(', ') : 'Belirtilmedi') : 'İstemiyor' }
+      ],
+      formError: s.formError,
+      nextLabel: s.step < 5 ? 'Devam Et' : 'Başvuruyu Tamamla',
+      fullName: full, memberNo: n.memberNo || '2026-001057', qrCells: this.qr(),
+      announcements: [
+        { title: 'Kuruluş coşkusu sürüyor', body: '91 milletvekilimizle TBMM\u2019de ana muhalefet görevine başladık.', date: '24 Temmuz 2026' },
+        { title: 'İl kongreleri takvimi', body: 'Ağustos-Eylül aylarında tüm illerde kuruluş kongreleri yapılacak.', date: '25 Temmuz 2026' },
+        { title: 'Gönüllü ol', body: 'Mahalle temsilciliği başvuruları üye panelinden alınıyor.', date: '25 Temmuz 2026' }
+      ],
+      back: () => s.step === 1 ? this.setState({ screen: 'entry', formError: '' }) : this.setState({ step: s.step - 1, formError: '' }),
+      goCard: () => this.setState({ screen: 'panel' }),
+      reset: () => this.setState({ screen: 'entry', step: 1, tc: '', tcError: '', nvi: null, autoFilled: false,
+        mName: '', mSurname: '', mDob: '', mGender: '', mBirthPlace: '', hood: '', address: '', dob: '', phone: '', emailUser: '', emailDomain: 'gmail.com', emailCustom: '', city: '', district: '', edu: '', program: '', job: '', workStatus: '', sector: '', wasMember: false, prevParty: '', wantRole: false, roles: [], consent: false, declare: false, formError: '' }),
+      next: () => {
+        if (s.step === 1 && blank) {
+          if (!s.mName.trim() || !s.mSurname.trim()) return this.setState({ formError: 'Ad ve soyad alanları zorunludur.' });
+          if (!s.mBirthPlace.trim()) return this.setState({ formError: 'Doğum yeri zorunludur.' });
+        }
+        if (s.step === 2) {
+          if (!s.dob) return this.setState({ formError: 'Doğum tarihinizi gün, ay ve yıl olarak eksiksiz giriniz.' });
+          const dparts = s.dob.split('-'), dy = +dparts[0], dm = +dparts[1], dd = +dparts[2];
+          const dnow = new Date();
+          if (!dy || !dm || !dd || dm < 1 || dm > 12 || dd < 1 || dd > 31) return this.setState({ formError: 'Doğum tarihi geçersiz. Gün, ay ve yıl bilgisini kontrol ediniz.' });
+          if (dy < 1900 || dy > dnow.getFullYear()) return this.setState({ formError: 'Doğum yılı hatalı görünüyor. Lütfen dört haneli geçerli bir yıl giriniz.' });
+          const chk = new Date(dy, dm - 1, dd);
+          if (chk.getFullYear() !== dy || chk.getMonth() !== dm - 1 || chk.getDate() !== dd) return this.setState({ formError: 'Böyle bir tarih yok. Gün ve ay bilgisini kontrol ediniz.' });
+          if (s.dob > maxDob) return this.setState({ formError: 'Üyelik için 18 yaşını doldurmuş olmanız gerekir.' });
+          if (!/^05\d{9}$/.test(s.phone.replace(/\D/g, ''))) return this.setState({ formError: 'Cep telefonu 05 ile başlayan 11 haneli olmalıdır. Örn: 0532 111 22 33' });
+          if (s.emailUser.trim() && !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(emailFull)) return this.setState({ formError: 'E-posta adresini kontrol ediniz veya alanı boş bırakınız.' });
+          if (!s.city.trim() || !s.district.trim()) return this.setState({ formError: 'İl ve ilçe bilgisi zorunludur.' });
+          if (!s.hood.trim()) return this.setState({ formError: 'Mahalle bilgisi zorunludur.' });
+          if (!s.address.trim()) return this.setState({ formError: 'Açık adres bilgisi zorunludur.' });
+        }
+        if (s.step === 3) {
+          if (!s.edu) return this.setState({ formError: 'Öğrenim durumunuzu seçiniz.' });
+          if (!s.job.trim()) return this.setState({ formError: 'Ana meslek / uğraş alanınızı giriniz.' });
+          if (!s.workStatus) return this.setState({ formError: 'Çalışma durumunuzu seçiniz.' });
+        }
+        if (s.step === 4) {
+          if (s.wasMember && !s.prevParty) return this.setState({ formError: 'Son üyesi olduğunuz siyasi partiyi seçiniz.' });
+          return this.setState({ step: 5, formError: '' });
+        }
+        if (s.step === 5) {
+          if (!s.consent) return this.setState({ formError: 'Üyelik bilgilerinizin işlenmesine rıza vermeniz gerekir.' });
+          if (!s.declare) return this.setState({ formError: 'Bilgilerin doğruluğunu beyan etmeniz gerekir.' });
+          return this.setState({ screen: 'done', formError: '' });
+        }
+        this.setState({ step: s.step + 1, formError: '' });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
