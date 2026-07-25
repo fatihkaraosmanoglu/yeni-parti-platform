@@ -79,17 +79,17 @@ input[type=checkbox]{-webkit-appearance:auto;appearance:auto}
       <!-- Adım 1: kimlik (otomatik dolu) -->
       <sc-if value="{{ isS1blank }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex;flex-direction:column;gap:16px;animation:fadeUp .3s ease both">
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Ad <span style="color:#D0212A">*</span></span>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Ad <span style="color:#D0212A">*</span></span>
             <input type="text" value="{{ mName }}" onChange="{{ onMName }}" placeholder="Adınız" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Soyad <span style="color:#D0212A">*</span></span>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Soyad <span style="color:#D0212A">*</span></span>
             <input type="text" value="{{ mSurname }}" onChange="{{ onMSurname }}" placeholder="Soyadınız" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333">Cinsiyet
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333">Cinsiyet
             <select value="{{ mGender }}" onChange="{{ onMGender }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
               <option value="">Seçiniz</option>
               <option value="Kadın">Kadın</option>
               <option value="Erkek">Erkek</option>
             </select></label>
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Doğum Yeri <span style="color:#D0212A">*</span></span>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Doğum Yeri <span style="color:#D0212A">*</span></span>
             <div style="position:relative">
               <input type="text" autoComplete="off" value="{{ mBirthPlace }}" onChange="{{ onMBirthPlace }}" onFocus="{{ openSug }}" onBlur="{{ closeSug }}" placeholder="Örn. İstanbul" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
               <sc-if value="{{ showSug }}" hint-placeholder-val="{{ false }}">
@@ -120,12 +120,25 @@ input[type=checkbox]{-webkit-appearance:auto;appearance:auto}
       <!-- Adım 2: iletişim -->
       <sc-if value="{{ isS2 }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex;flex-direction:column;gap:18px;animation:fadeUp .3s ease both">
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Doğum Tarihi <span style="color:#D0212A">*</span></span>
-            <input type="date" value="{{ dob }}" onChange="{{ onDob }}" min="1900-01-01" max="{{ maxDob }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Doğum Tarihi <span style="color:#D0212A">*</span></span>
+            <div style="display:flex;gap:10px">
+              <select value="{{ dobD }}" onChange="{{ onDobD }}" style="flex:1;min-width:0;padding:14px 8px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111;text-align:center">
+                <option value="">Gün</option>
+                <sc-for list="{{ dayOptions }}" as="o" hint-placeholder-count="0"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+              <select value="{{ dobM }}" onChange="{{ onDobM }}" style="flex:1.4;min-width:0;padding:14px 8px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111;text-align:center">
+                <option value="">Ay</option>
+                <sc-for list="{{ monthOptions }}" as="o" hint-placeholder-count="0"><option value="{{ o.v }}">{{ o.label }}</option></sc-for>
+              </select>
+              <select value="{{ dobY }}" onChange="{{ onDobY }}" style="flex:1.2;min-width:0;padding:14px 8px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111;text-align:center">
+                <option value="">Yıl</option>
+                <sc-for list="{{ yearOptions }}" as="o" hint-placeholder-count="0"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+            </div>
             <span style="font-size:12.5px;font-weight:500;color:#9a9a9a">Üyelik için 18 yaşını doldurmuş olmanız gerekir.</span></label>
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Cep Telefonu <span style="color:#D0212A">*</span></span>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Cep Telefonu <span style="color:#D0212A">*</span></span>
             <input type="tel" inputMode="tel" value="{{ phone }}" onChange="{{ onPhone }}" placeholder="05XX XXX XX XX" inputMode="numeric" maxLength="14" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">İl <span style="color:#D0212A">*</span></span>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">İl <span style="color:#D0212A">*</span></span>
             <div style="position:relative">
               <input type="text" autoComplete="off" value="{{ city }}" onChange="{{ onCity }}" onFocus="{{ cityFocus }}" onBlur="{{ cityBlur }}" placeholder="Örn. İstanbul" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
               <sc-if value="{{ cityShow }}" hint-placeholder-val="{{ false }}">
@@ -136,7 +149,7 @@ input[type=checkbox]{-webkit-appearance:auto;appearance:auto}
                 </div>
               </sc-if>
             </div></label>
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">İlçe <span style="color:#D0212A">*</span></span>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">İlçe <span style="color:#D0212A">*</span></span>
             <div style="position:relative">
               <input type="text" autoComplete="off" value="{{ district }}" onChange="{{ onDistrict }}" onFocus="{{ distFocus }}" onBlur="{{ distBlur }}" placeholder="{{ distPlaceholder }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
               <sc-if value="{{ distShow }}" hint-placeholder-val="{{ false }}">
@@ -147,7 +160,7 @@ input[type=checkbox]{-webkit-appearance:auto;appearance:auto}
                 </div>
               </sc-if>
             </div></label>
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Mahalle <span style="color:#D0212A">*</span></span>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Mahalle <span style="color:#D0212A">*</span></span>
             <div style="position:relative">
               <input type="text" autoComplete="off" value="{{ hood }}" onChange="{{ onHood }}" onFocus="{{ hoodFocus }}" onBlur="{{ hoodBlur }}" placeholder="{{ hoodPlaceholder }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
               <sc-if value="{{ hoodShow }}" hint-placeholder-val="{{ false }}">
@@ -158,9 +171,9 @@ input[type=checkbox]{-webkit-appearance:auto;appearance:auto}
                 </div>
               </sc-if>
             </div></label>
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Açık Adres <span style="color:#D0212A">*</span></span>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Açık Adres <span style="color:#D0212A">*</span></span>
             <textarea rows="3" value="{{ address }}" onChange="{{ onAddress }}" placeholder="Sokak, bina ve daire no" style="width:100%;padding:14px;font-size:16.5px;font-family:'Archivo',sans-serif;border:2px solid #dddddd;border-radius:12px;resize:vertical"></textarea></label>
-          <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">E-posta <span style="font-weight:500;color:#9a9a9a">(zorunlu değil)</span></span>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">E-posta <span style="font-weight:500;color:#9a9a9a">(zorunlu değil)</span></span>
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
               <input type="text" inputMode="email" autoComplete="off" value="{{ emailUser }}" onChange="{{ onEmailUser }}" placeholder="kullaniciadi" style="flex:1 1 130px;min-width:0;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px">
               <span style="font-size:17px;font-weight:700;color:#999999;flex:none">@</span>
@@ -185,25 +198,25 @@ input[type=checkbox]{-webkit-appearance:auto;appearance:auto}
             <div style="background:#f0f8f2;border:1px solid #c4e3cd;color:#1f6b3a;border-radius:12px;padding:14px 16px;font-size:16px;font-weight:600;line-height:1.5">Eğitim ve meslek bilgileriniz kayıtlardan otomatik dolduruldu. Gerekiyorsa güncelleyebilirsiniz.</div>
           </sc-if>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">
-            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Öğrenim Durumu <span style="color:#D0212A">*</span></span>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Öğrenim Durumu <span style="color:#D0212A">*</span></span>
             <select value="{{ edu }}" onChange="{{ onEdu }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
               <option value="">Seçiniz…</option>
               <sc-for list="{{ eduOptions }}" as="o" hint-placeholder-count="4">
                 <option value="{{ o }}">{{ o }}</option>
               </sc-for>
             </select></label>
-            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333">Bölüm / Program
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333">Bölüm / Program
               <input type="text" value="{{ program }}" onChange="{{ onProgram }}" placeholder="Bölüm veya program adınız" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
-            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Ana Meslek / Uğraş Alanı <span style="color:#D0212A">*</span></span>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Ana Meslek / Uğraş Alanı <span style="color:#D0212A">*</span></span>
               <input type="text" value="{{ job }}" onChange="{{ onJob }}" placeholder="Ana mesleğiniz" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px"></label>
-            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Çalışma Durumu <span style="color:#D0212A">*</span></span>
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333"><span style="display:flex;align-items:center;gap:5px">Çalışma Durumu <span style="color:#D0212A">*</span></span>
             <select value="{{ workStatus }}" onChange="{{ onWorkStatus }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
               <option value="">Seçiniz…</option>
               <sc-for list="{{ workOptions }}" as="o" hint-placeholder-count="4">
                 <option value="{{ o }}">{{ o }}</option>
               </sc-for>
             </select></label>
-            <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333">Çalıştığı Sektör
+            <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333">Çalıştığı Sektör
             <select value="{{ sector }}" onChange="{{ onSector }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
               <option value="">Seçiniz…</option>
               <sc-for list="{{ sectorOptions }}" as="o" hint-placeholder-count="4">
@@ -223,7 +236,7 @@ input[type=checkbox]{-webkit-appearance:auto;appearance:auto}
               <span>Daha önce başka bir siyasi partiye üye miydiniz?</span>
             </label>
             <sc-if value="{{ wasMember }}" hint-placeholder-val="{{ false }}">
-              <label style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;font-weight:700;color:#333333;margin-left:38px"><span style="display:flex;align-items:center;gap:5px">Son üyesi olduğunuz siyasi parti hangisiydi? <span style="color:#D0212A">*</span></span>
+              <label style="display:flex;flex-direction:column;gap:8px;font-size:16px;font-weight:700;color:#333333;margin-left:38px"><span style="display:flex;align-items:center;gap:5px">Son üyesi olduğunuz siyasi parti hangisiydi? <span style="color:#D0212A">*</span></span>
                 <select value="{{ prevParty }}" onChange="{{ onPrevParty }}" style="width:100%;padding:14px;font-size:16.5px;border:2px solid #dddddd;border-radius:12px;background:#ffffff;color:#111111">
                   <option value="">Seçiniz…</option>
                   <sc-for list="{{ partyOptions }}" as="p" hint-placeholder-count="5">
@@ -365,7 +378,7 @@ class Component extends DCLogic {
     screen: 'entry', step: 1, tc: '', tcError: '', querying: false,
     nvi: null, autoFilled: false, loc: null,
     mName: '', mSurname: '', mDob: '', mGender: '', mBirthPlace: '', sugOpen: false, sugField: '',
-    phone: '', emailUser: '', emailDomain: 'gmail.com', emailCustom: '', city: '', district: '', hood: '', address: '', dob: '',
+    phone: '', emailUser: '', emailDomain: 'gmail.com', emailCustom: '', city: '', district: '', hood: '', address: '', dob: '', dobD: '', dobM: '', dobY: '',
     edu: '', program: '', job: '', workStatus: '', sector: '',
     wasMember: false, prevParty: '', wantRole: false, roles: [],
     consent: false, declare: false, formError: ''
@@ -431,10 +444,19 @@ class Component extends DCLogic {
         emailDomain: rec.email ? (this.mailDomains.indexOf(rec.email.split('@')[1]) !== -1 ? rec.email.split('@')[1] : '__other') : 'gmail.com',
         emailCustom: rec.email && this.mailDomains.indexOf(rec.email.split('@')[1]) === -1 ? rec.email.split('@')[1] : '',
         hood: rec.hood || '', address: rec.address || '',
-        dob: rec.dob ? rec.dob.split('.').reverse().join('-') : ''
+        dob: rec.dob ? rec.dob.split('.').reverse().join('-') : '',
+        dobD: rec.dob ? String(+rec.dob.split('.')[0]) : '', dobM: rec.dob ? String(+rec.dob.split('.')[1]) : '', dobY: rec.dob ? rec.dob.split('.')[2] : ''
       });
     }, 700);
   };
+
+  setDobPart(k, v) {
+    this.setState(st => {
+      const p = { dobD: st.dobD, dobM: st.dobM, dobY: st.dobY, [k]: v };
+      const dob = (p.dobD && p.dobM && p.dobY) ? p.dobY + '-' + p.dobM.padStart(2, '0') + '-' + p.dobD.padStart(2, '0') : '';
+      return Object.assign({ formError: '' }, p, { dob });
+    });
+  }
 
   qr() {
     const cells = []; let seed = 7;
@@ -554,7 +576,15 @@ class Component extends DCLogic {
       hoodShow: hoodAc.show, hoodItems: hoodAc.items,
       hoodPlaceholder: !this.state.loc ? 'Adres verileri yükleniyor…' : (distKey ? (hoodList.length ? 'Mahalle seçiniz veya yazınız' : 'Mahallenizi yazınız') : 'Önce ilçe seçiniz'),
       address: s.address, onAddress: set('address'),
-      dob: s.dob, onDob: set('dob'), maxDob: maxDob,
+      dob: s.dob,
+      dobD: s.dobD, dobM: s.dobM, dobY: s.dobY,
+      dayOptions: Array.from({ length: 31 }, (x, i) => String(i + 1)),
+      monthOptions: ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'].map((label, i) => ({ v: String(i + 1), label })),
+      yearOptions: Array.from({ length: new Date().getFullYear() - 1899 }, (x, i) => String(new Date().getFullYear() - i)),
+      onDobD: e => this.setDobPart('dobD', e.target.value),
+      onDobM: e => this.setDobPart('dobM', e.target.value),
+      onDobY: e => this.setDobPart('dobY', e.target.value),
+      maxDob: maxDob,
       edu: s.edu, onEdu: set('edu'), eduOptions: this.eduOptions,
       program: s.program, onProgram: set('program'),
       job: s.job, onJob: set('job'),
@@ -594,7 +624,7 @@ class Component extends DCLogic {
       back: () => s.step === 1 ? this.setState({ screen: 'entry', formError: '' }) : this.setState({ step: s.step - 1, formError: '' }),
       goCard: () => this.setState({ screen: 'panel' }),
       reset: () => this.setState({ screen: 'entry', step: 1, tc: '', tcError: '', nvi: null, autoFilled: false,
-        mName: '', mSurname: '', mDob: '', mGender: '', mBirthPlace: '', hood: '', address: '', dob: '', phone: '', emailUser: '', emailDomain: 'gmail.com', emailCustom: '', city: '', district: '', edu: '', program: '', job: '', workStatus: '', sector: '', wasMember: false, prevParty: '', wantRole: false, roles: [], consent: false, declare: false, formError: '' }),
+        mName: '', mSurname: '', mDob: '', mGender: '', mBirthPlace: '', hood: '', address: '', dob: '', dobD: '', dobM: '', dobY: '', phone: '', emailUser: '', emailDomain: 'gmail.com', emailCustom: '', city: '', district: '', edu: '', program: '', job: '', workStatus: '', sector: '', wasMember: false, prevParty: '', wantRole: false, roles: [], consent: false, declare: false, formError: '' }),
       next: () => {
         if (s.step === 1 && blank) {
           if (!s.mName.trim() || !s.mSurname.trim()) return this.setState({ formError: 'Ad ve soyad alanları zorunludur.' });
